@@ -7,6 +7,7 @@ export default function LoginOrCreatePost(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const usernameRef = useRef();
     const passwordRef = useRef();
+    const commentRef = useRef();
 
     function handleLoginSubmit(e) {
         e?.preventDefault(); // prevents default form submit action
@@ -37,6 +38,24 @@ export default function LoginOrCreatePost(props) {
     function handleCommentSubmit(e) {
         e?.preventDefault(); // prevents default form submit action
 
+        fetch("https://cs571.org/rest/s25/ice/comments", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId(),
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+                comment: commentRef.current.value,
+            }),
+        }).then((res) => {
+            if (res.status === 200) {
+                alert("Success! Added comments.");
+                props.refreshComments();
+            } else {
+                alert("Oops! Something went wrong.");
+            }
+        });
         // TODO: POST to https://cs571api.cs.wisc.edu/rest/s25/ice/comments
     }
 
@@ -52,7 +71,10 @@ export default function LoginOrCreatePost(props) {
                 </Button>
                 <Form onSubmit={handleCommentSubmit}>
                     <Form.Label htmlFor="commentInput">Your Comment</Form.Label>
-                    <Form.Control id="commentInput"></Form.Control>
+                    <Form.Control
+                        id="commentInput"
+                        ref={commentRef}
+                    ></Form.Control>
                     <br />
                     <Button type="submit" onClick={handleCommentSubmit}>
                         Post Comment
