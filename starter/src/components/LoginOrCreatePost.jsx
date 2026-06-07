@@ -5,8 +5,8 @@ export default function LoginOrCreatePost(props) {
     // Note! You should use this in combination with sessionStorage.
     // Otherwise, when the user refreshes the page, it will go away!
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const username = useRef();
+    const password = useRef();
 
     function handleLoginSubmit(e) {
         e?.preventDefault(); // prevents default form submit action
@@ -19,8 +19,8 @@ export default function LoginOrCreatePost(props) {
                 "Content-type": "application/json",
             },
             body: JSON.stringify({
-                username: username,
-                password: password,
+                username: username.current.value,
+                password: password.current.value,
             }),
         }).then((res) => {
             if (res.status === 401) {
@@ -64,21 +64,12 @@ export default function LoginOrCreatePost(props) {
         return (
             <Form onSubmit={handleLoginSubmit}>
                 <Form.Label htmlFor="usernameInput">Username</Form.Label>
-                <Form.Control
-                    id="usernameInput"
-                    value={username}
-                    onChange={(e) => {
-                        setUsername(e.target.value);
-                    }}
-                ></Form.Control>
+                <Form.Control id="usernameInput" ref={username}></Form.Control>
                 <Form.Label htmlFor="passwordInput">Password</Form.Label>
                 <Form.Control
                     id="passwordInput"
                     type="password"
-                    value={password}
-                    onChange={(e) => {
-                        setPassword(e.target.value);
-                    }}
+                    ref={password}
                 ></Form.Control>
                 <br />
                 <Button type="submit" onClick={handleLoginSubmit}>
