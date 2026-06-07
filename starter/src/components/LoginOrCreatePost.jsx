@@ -61,6 +61,20 @@ export default function LoginOrCreatePost(props) {
 
     function handleLogout() {
         // TODO POST to https://cs571api.cs.wisc.edu/rest/s25/ice/logout
+        fetch("https://cs571.org/rest/s25/ice/logout", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "X-CS571-ID": CS571.getBadgerId(),
+            },
+        }).then((res) => {
+            if (res.status === 200) {
+                alert("You've logged out!");
+                setIsLoggedIn(false);
+            } else {
+                alert("Somethig went wrong!");
+            }
+        });
     }
 
     if (isLoggedIn) {
