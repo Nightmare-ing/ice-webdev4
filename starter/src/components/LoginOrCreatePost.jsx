@@ -13,6 +13,7 @@ export default function LoginOrCreatePost(props) {
 
         fetch("https://cs571.org/rest/s25/ice/login", {
             method: "POST",
+            credentials: "include",
             headers: {
                 "X-CS571-ID": CS571.getBadgerId(),
                 "Content-type": "application/json",
@@ -26,6 +27,7 @@ export default function LoginOrCreatePost(props) {
                 alert("Invalid username or password!");
             } else if (res.status === 200) {
                 alert("Successfully logged in!");
+                setIsLoggedIn(true);
             } else {
                 alert("Something happened!");
             }
